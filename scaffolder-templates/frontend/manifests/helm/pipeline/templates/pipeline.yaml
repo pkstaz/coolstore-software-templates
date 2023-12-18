@@ -18,9 +18,6 @@ spec:
     description: reference of the image that will get created
     default: {{ include "image.url" . }}
     type: string
-  workspaces:
-  - name: shared-workspace
-
   tasks:
   - name: fetch-repository
     params:
