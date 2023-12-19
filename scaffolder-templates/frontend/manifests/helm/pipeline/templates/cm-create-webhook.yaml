@@ -8,7 +8,7 @@ data:
       vars:
         git_host: {{ .Values.git.host }}
         git_project: {{ .Values.git.name }}
-        git_token: {{ .Values.git.token }}
+        git_token_secret: {{ .Values.git.token }}
         webhook_url: https://webhook-{{ .Values.app.name }}-el-{{ .Values.app.namespace }}{{ .Values.app.cluster }}
         webhook_secret: {{ .Values.git.webhookSecret }}
 
@@ -23,13 +23,13 @@ data:
 
         - name: Decode git token
           set_fact:
-            git_token: '{{ "{{" }} r_token.resources[0].data.token | b64decode {{ "}}" }}'
+            git_token_secret: '{{ "{{" }} r_token.resources[0].data.token | b64decode {{ "}}" }}'
   
-        - name: Retrieve private secret
+        - name: Retrieve private secret (web-hook)
           kubernetes.core.k8s_info:
             api_version: v1
             kind: Secret
-            name: {{ .Values.app.name }}-git-token
+            name: {{ .Values.app.name }}-web-hook
             namespace: {{ .Values.app.namespace }}
           register: r_pass
 
@@ -43,7 +43,7 @@ data:
             method: GET
             body_format: form-urlencoded
             headers:
-              PRIVATE-TOKEN: '{{ "{{" }} git_token {{ "}}" }}'
+              PRIVATE-TOKEN: '{{ "{{" }} git_token_secret {{ "}}" }}'
             validate_certs: false
             status_code: [200]
           register: r_git_projects
@@ -65,6 +65,6 @@ data:
               tag_push_events: true
               token: '{{ "{{" }} webhook_secret {{ "}}" }}'
             headers:
-              PRIVATE-TOKEN: '{{ "{{" }} git_token {{ "}}" }}'
+              PRIVATE-TOKEN: '{{ "{{" }} git_token_secret {{ "}}" }}'
             validate_certs: false
             status_code: [201]
