@@ -30,17 +30,27 @@ spec:
             value: $(tt.params.git-revision)
           - name: output-image
             value: $(tt.params.output-image)
-        pipelineRef:
-          name: {{ .Values.app.name }}
-        params:
           - name: target-namespace
             value: {{ .Values.app.namespace }}
+        pipelineRef:
+          name: {{ .Values.app.name }}
+        serviceAccountName: pipeline
         workspaces:
           - name: maven-settings
             emptyDir: {}
           - name: shared-workspace
-            persistentvolumeclaim:
-              claimName: {{ .Values.app.name }}-maven-local-m2-pv
+            volumeClaimTemplate:
+              spec:
+                accessModes:
+                  - ReadWriteOnce
+                resources:
+                  requests:
+                    storage: 1Gi
           - name: maven-local-m2
-            persistentvolumeclaim:
-              claimName: {{ .Values.app.name }}-maven-local-m2-pv
+            volumeClaimTemplate:
+              spec:
+                accessModes:
+                  - ReadWriteOnce
+                resources:
+                  requests:
+                    storage: 2Gi

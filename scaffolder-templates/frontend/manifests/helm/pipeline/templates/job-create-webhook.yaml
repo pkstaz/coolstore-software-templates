@@ -3,7 +3,7 @@ kind: Job
 metadata:
   name: {{ .Values.app.name }}-webhook-job
   annotations:
-    argocd.argoproj.io/sync-wave: "3"
+    argocd.argoproj.io/sync-wave: "1"
 spec:
   backoffLimit: 100
   template:
@@ -31,7 +31,7 @@ spec:
           name: {{ .Values.app.name }}-webhook-script
       - name: git-token
         secret:
-          secretName: {{ .Values.app.name }}-git-token
+          secretName: git-token
       - name: webhook-secret
         secret:
           secretName: {{ .Values.app.name }}-webhook-secret

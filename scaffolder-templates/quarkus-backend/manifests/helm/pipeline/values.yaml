@@ -6,9 +6,9 @@ app:
 git:
   branch: main
   repo: ${{values.source_repository}}
-  org: ${{values.git_owner}}
+  org: ${{values.org}}
   name: ${{values.repository_name}}
-  host: ${{ values.host }}
+  host: ${{values.git_host}}
   token: ''
   webhookSecret: 'secret-webhook'
 

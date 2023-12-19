@@ -116,6 +116,8 @@ spec:
           destination:  https://${{ parameters.host }}/${{ parameters.group }}/${{parameters.component_id}}-gitops.git
           source_repository: https://${{ parameters.host }}/${{ parameters.group }}/${{parameters.component_id}}.git
           repository_name: ${{parameters.component_id}}
+          git_host: ${{ parameters.host }}
+          org: ${{parameters.group}}
           cluster: ${{parameters.cluster_id}}
           namespace: ${{parameters.namespace}}
           image_host: ${{parameters.image_host}}/${{parameters.namespace}}

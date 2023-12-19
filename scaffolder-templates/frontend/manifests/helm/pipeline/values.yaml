@@ -6,14 +6,18 @@ app:
 git:
   branch: main
   repo: ${{values.source_repository}}
-  org: ${{values.git_owner}}
+  org: ${{values.org}}
   name: ${{values.repository_name}}
+  host: ${{values.git_host}}
+  token: ''
+  webhookSecret: ''
 
 image:
   host: ${{values.image_host}}
   name: ${{values.image_name}}
   tag: ${{values.image_tag}}
 
+host: ""
 
 pipelineStorage:
   pvcSize: 3Gi

@@ -24,7 +24,7 @@ metadata:
     - url: https://console-openshift-console${{values.cluster_id}}/k8s/ns/${{values.namespace}}/deployments/${{values.component_id}}
       title: Deployment
       icon: web
-    - url: https://devspaces${{values.cluster_id}}/#https://${{values.host}}/${{values.group}}/${{values.component_id}}?che-editor=che-incubator/che-code/insiders&devfilePath=.devfile-vscode.yaml
+    - url: https://devspaces${{values.cluster_id}}/#https://${{values.host}}/${{values.group}}/${{values.component_id}}?che-editor=che-incubator/che-idea/latest
       title: OpenShift Dev Spaces (VS Code)
       icon: web
 spec:
