@@ -1,72 +1,39 @@
-const path = require('path');
+'use strict';
+
+const path = require("path");
 const express = require('express');
+const bodyParser = require('body-parser');
 const app = express();
-const port = 8080;
-const { createProxyMiddleware } = require('http-proxy-middleware');
+
 const cors = require('cors');
-app.use(cors({
-  'allowedHeaders': ['Content-Type'],
-  'origin': '*',
-  'preflightContinue': true
-}));
+const probe = require('kube-probe');
 
-let customerApiProxyOptions = {
-  target: 'http://gateway.fedev.10.19.2.21.nip.io:30862',
-  changeOrigin: true,
-  pathRewrite: {
-    '^/customers-api': `/`,
-  },
-  logLevel: 'debug',
-  secure: false,
-};
+// Environment Variables
+const gulp = require('gulp'); // Load gulp
+const gulpfile = require('./gulpfile'); // Loads our config task
+// Kick of gulp 'config' task, which generates angular const configuration
+gulp.series(gulp.task('config'))();
 
-const customerApiProxy = createProxyMiddleware(customerApiProxyOptions);
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
 
-let orderApiProxyOptions = {
-  target: 'http://gateway.fedev.10.19.2.21.nip.io:30862',
-  changeOrigin: true,
-  pathRewrite: {
-    '^/orders-api': `/`,
-  },
-  logLevel: 'debug',
-  secure: false,
-};
+// Enable CORS support
+app.use(cors());
 
-const ordersApiProxy = createProxyMiddleware(orderApiProxyOptions);
+// Add the ability to force the application into a degraded state
+require('./middleware/boom')(app)
 
-let cropsApiProxyOptions = {
-  target: 'https://www.growstuff.org',
-  changeOrigin: true,
-  pathRewrite: {
-    '^/crops-api': `/`,
-  },
-  logLevel: 'debug',
-  secure: false,
-};
-
-const cropsApiProxy = createProxyMiddleware(cropsApiProxyOptions);
-
-let productApiProxyOptions = {
-  target: 'http://gateway.fedev.10.19.2.21.nip.io:30862',
-  changeOrigin: true,
-  pathRewrite: {
-    '^/products-api': `/`,
-  },
-  logLevel: 'debug',
-  secure: false,
-};
-
-const productsApiProxy = createProxyMiddleware(productApiProxyOptions);
-
-app.use(express.static(path.join(__dirname, '/dist')));
-
-app.use('/products-api/', productsApiProxy);
-app.use('/orders-api/', ordersApiProxy);
-app.use('/customers-api/', customerApiProxy);
-app.use('/crops-api/', cropsApiProxy);
-
-app.get('*', (req, res) =>{
-  res.sendFile(path.join(__dirname + '/dist/index.html'));
+// error handling
+app.use(function(err, req, res, next) {
+    console.error(err.stack);
+    res.status(500).send('Something bad happened!');
 });
 
-app.listen(port, () => console.log(`Listening on port ${port}`));
+app.use('/', express.static(path.join(__dirname, 'views')));
+app.use('/app', express.static(path.join(__dirname, 'app')));
+app.use('/node_modules', express.static(path.join(__dirname, 'node_modules')));
+
+// Add a health check
+probe(app);
+
+module.exports = app;

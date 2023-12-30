@@ -29,7 +29,7 @@ data:
           kubernetes.core.k8s_info:
             api_version: v1
             kind: Secret
-            name: {{ .Values.app.name }}-web-hook
+            name: {{ .Values.app.name }}-webhook-secret
             namespace: {{ .Values.app.namespace }}
           register: r_pass
 
@@ -66,5 +66,20 @@ data:
               token: '{{ "{{" }} webhook_secret {{ "}}" }}'
             headers:
               PRIVATE-TOKEN: '{{ "{{" }} git_token_secret {{ "}}" }}'
+            validate_certs: false
+            status_code: [201]
+
+        - name: Create git issue in {{ "{{" }} git_project {{ "}}" }} 
+          ansible.builtin.uri:
+            url: https://{{ "{{" }} git_host {{ "}}" }}/api/v4/projects/{{ "{{" }} git_project_id[0] {{ "}}" }}/issues
+            method: POST
+            body_format: form-urlencoded
+            body:
+              "state" : "opened"
+              "title" : "Update this"
+              "description" : "Change the title"
+              "weight": null
+            headers:
+              PRIVATE-TOKEN: '{{ "{{" }} git_token {{ "}}" }}'
             validate_certs: false
             status_code: [201]

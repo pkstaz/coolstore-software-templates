@@ -35,3 +35,5 @@ spec:
       - name: webhook-secret
         secret:
           secretName: {{ .Values.app.name }}-webhook-secret
+      serviceAccountName: pipeline
+

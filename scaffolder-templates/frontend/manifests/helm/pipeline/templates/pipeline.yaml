@@ -36,21 +36,30 @@ spec:
   - name: install-dependencies
     taskRef:
       name: npm
+      kind: Task
+    runAfter:
+      - fetch-repository
     workspaces:
       - name: source
         workspace: shared-workspace
-    params:
-      - name: PATH_CONTEXT
-        value: "dist"
-      - name: ARGS
-        value:
-          - clean-install
-    runAfter:
-      - fetch-repository
   - name: build-and-push
     params:
+      - name: STORAGE_DRIVER
+        value: vfs
       - name: IMAGE
         value: $(params.output-image)
+      - name: DOCKERFILE
+        value: ./Dockerfile
+      - name: CONTEXT
+        value: .
+      - name: TLSVERIFY
+        value: "true"
+      - name: SKIP_PUSH
+        value: "false"
+      - name: FORMAT
+        value: oci
+      - name: BUILDER_IMAGE
+        value: registry.redhat.io/rhel8/buildah@sha256:0a86ecbdfbe86e9d225b7fe4b090a0dd6d323f8afdfdf2bd933ff223ddb53320
     runAfter:
     - install-dependencies
     taskRef:
