@@ -46,7 +46,8 @@ spec:
           protocol: TCP
         {{- with .Values.env }}
         env:
-          {{- toYaml . | nindent 12 }}
+        - name: SECURE_COOLSTORE_GW_ENDPOINT
+          value: {{ .Values.gateway }}
         {{- end }}
         resources: {{ if not .Values.limits}}{}{{end}}
           {{- if .Values.limits }}
@@ -58,27 +59,4 @@ spec:
           requests:
             cpu: {{ .Values.requests.cpu }}
             memory: {{ .Values.requests.memory }}
-          {{- end }}
-        {{- with .Values.health }}
-        readinessProbe:
-          httpGet:
-            path: {{ .readinessEndpoint }}
-            port: {{ $.Values.port }}
-          initialDelaySeconds: {{ .probeDelay }}
-          timeoutSeconds: {{ .probeTimeout }}
-        livenessProbe:
-          httpGet:
-            path: {{ .livenessEndpoint }}
-            port: {{ $.Values.port }}
-          periodSeconds: {{ .probePeriod }}
-          initialDelaySeconds: {{ .probeDelay }}
-          timeoutSeconds: {{ .probeTimeout }}
         {{- end }}
-        volumeMounts:
-        - name: {{ .Values.applicationName }}-nginx-volume
-          mountPath: /etc/nginx/nginx.conf
-          subPath: nginx.conf
-      volumes:
-        - name: {{ .Values.applicationName }}-nginx-volume
-          configMap:
-            name: {{ .Values.applicationName }}-nginx-config

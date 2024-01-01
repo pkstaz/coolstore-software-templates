@@ -6,6 +6,7 @@ metadata:
   labels:
     type: pipeline
     backstage.io/kubernetes-id: {{ .Values.app.name }}
+    app.kubernetes.io/instance: {{ .Values.app.name }}
 spec:
   params:
   - name: git-url

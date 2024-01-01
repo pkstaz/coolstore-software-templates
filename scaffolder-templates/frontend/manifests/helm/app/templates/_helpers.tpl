@@ -52,7 +52,6 @@ Selector labels
 */}}
 {{- define "frontend.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "frontend.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
