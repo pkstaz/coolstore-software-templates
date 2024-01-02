@@ -12,3 +12,4 @@ spec:
   {{- if .Values.pipelineStorage.storageClassName }}
   storageClassName: {{ .Values.pipelineStorage.storageClassName }}
   {{- end }}
+

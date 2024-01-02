@@ -16,7 +16,7 @@ health:
   probeDelay: 5
   probePeriod: 10
   probeTimeout: 2
-gateway: https://gateway-vertx-${{values.namespace}}.${{values.cluster}}/
+gateway: https://gateway-vertx-${{values.namespace}}${{values.cluster}}/
 
 image:
   repository: ${{values.image_host}}/${{values.image_name}}

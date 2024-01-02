@@ -19,9 +19,7 @@ spec:
       metadata:
         name: {{ .Values.app.name }}-pipeline-$(uid)
         labels:
-          type: pipeline
           backstage.io/kubernetes-id: {{ .Values.app.name }}
-          tekton.dev/pipeline: {{ .Values.app.name }}
       spec:
         params:
           - name: git-url
@@ -38,15 +36,7 @@ spec:
         workspaces:
           - name: maven-settings
             emptyDir: {}
-          - name: shared-workspace
-            volumeClaimTemplate:
-              spec:
-                accessModes:
-                  - ReadWriteOnce
-                resources:
-                  requests:
-                    storage: 1Gi
-          - name: maven-local-m2
+          - name: source
             volumeClaimTemplate:
               spec:
                 accessModes:

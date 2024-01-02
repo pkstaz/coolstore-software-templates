@@ -18,7 +18,7 @@ spec:
           - /bin/sh
           - -c
           - |
-            tkn pipeline start {{ .Values.app.name }} --use-param-defaults -w name=shared-workspace,claimName={{ .Values.app.name }}-maven-local-m2-pvc -w name=maven-settings -w name=maven-local-m2
+            tkn pipeline start {{ .Values.app.name }} --use-param-defaults -w name=source,claimName={{ .Values.app.name }}-maven-local-m2-pvc -w name=maven-settings
           env:
             - name: HOME
               value: /tekton/home

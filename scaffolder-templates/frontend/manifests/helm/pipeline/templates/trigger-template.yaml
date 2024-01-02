@@ -17,11 +17,9 @@ spec:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        generateName: {{ .Values.app.name }}-
+        generateName: {{ .Values.app.name }}-$(uid)
         labels:
-          type: pipeline
-          backstage.io/kubernetes-id: {{ .Values.app.name }}
-          tekton.dev/pipeline: {{ .Values.app.name }}
+          backstage.io/kubernetes-id: ${{values.component_id}}
       spec:
         params:
           - name: git-url
@@ -43,4 +41,4 @@ spec:
                   - ReadWriteOnce
                 resources:
                   requests:
-                    storage: 1Gi
+                    storage: 3Gi

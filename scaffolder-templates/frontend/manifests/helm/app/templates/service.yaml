@@ -7,7 +7,7 @@ spec:
     port: {{ .Values.port }}
     targetPort: {{ .Values.targetPort }}
   selector:
-    deployment: {{ .Values.applicationName }}
+    {{- include "frontend.selectorLabels" $ | nindent 4 }}
 metadata:
   name: {{ .Values.applicationName }}
   labels:
