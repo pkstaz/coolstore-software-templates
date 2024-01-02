@@ -2,9 +2,12 @@ kind: Service
 apiVersion: v1
 spec:
   ports:
-  - name: {{ .Values.applicationName }}
+  - name: {{ .Values.portName }}
     port: {{ .Values.port }}
     targetPort: {{ .Values.targetPort }}
+  - name: {{ .Values.portNameHTTPS }}
+    port: {{ .Values.portHTTPS }}
+    targetPort: {{ .Values.targetPortHTTPS }}
   selector:
     deployment: {{ .Values.applicationName }}
 metadata:

@@ -4,7 +4,7 @@ metadata:
   name: {{ .Values.applicationName }}
   labels:
     {{- include "backstage.labels" . | nindent 4 }}
-    {{- include "quarkus-backend.labels" . | nindent 4 }}
+    {{- include "spring-backend.labels" . | nindent 4 }}
 spec:
   strategy:
     type: {{ .Values.deploymentStrategy.type }}
@@ -22,24 +22,26 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "quarkus-backend.selectorLabels" . | nindent 6 }}
+      {{- include "spring-backend.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       name: {{ .Values.applicationName }}
       labels:
         {{- include "backstage.labels" . | nindent 8 }}
-        {{- include "quarkus-backend.selectorLabels" . | nindent 8 }}
+        {{- include "spring-backend.selectorLabels" . | nindent 8 }}
     spec:
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriod | default 60 }}
-      serviceAccountName: {{ include "quarkus-backend.serviceAccountName" . }}
+      serviceAccountName: {{ include "spring-backend.serviceAccountName" . }}
       containers:
       - name: {{ .Values.applicationName }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
         imagePullPolicy: Always
         ports:
-        - name: http
-          containerPort: {{ .Values.port }}
+          - containerPort: {{ .Values.port }}
+            protocol: TCP
+        - containerPort: {{ .Values.portHTTPS }}
           protocol: TCP
+          portHTTPS
         {{- with .Values.env }}
         env:
           {{- toYaml . | nindent 12 }}
@@ -55,25 +57,3 @@ spec:
             cpu: {{ .Values.requests.cpu }}
             memory: {{ .Values.requests.memory }}
           {{- end }}
-        {{- with .Values.health }}
-        readinessProbe:
-          httpGet:
-            path: {{ .readinessEndpoint }}
-            port: {{ $.Values.port }}
-          initialDelaySeconds: {{ .probeDelay }}
-          timeoutSeconds: {{ .probeTimeout }}
-        livenessProbe:
-          httpGet:
-            path: {{ .livenessEndpoint }}
-            port: {{ $.Values.port }}
-          periodSeconds: {{ .probePeriod }}
-          initialDelaySeconds: {{ .probeDelay }}
-          timeoutSeconds: {{ .probeTimeout }}
-        {{- end }}
-        volumeMounts:
-          - name: {{ .Values.applicationName }}-secret-volume
-            mountPath: /deployments/config
-      volumes:
-        - name: {{ .Values.applicationName }}-secret-volume
-          secret:
-            secretName: {{ .Values.applicationName }}-secret

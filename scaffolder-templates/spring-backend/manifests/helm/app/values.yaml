@@ -2,8 +2,13 @@ applicationName: ${{values.component_id}}
 namespace: ${{values.namespace}}
 targetEnvironment: dev
 version: "1.0.0"
+portName: 8080-tcp
 port: 8080
 targetPort: 8080
+portHTTPS: 8443
+targetPortHTTPS: 8443
+portNameHTTPS: 8443-tcp
+
 routes: []
 deploymentStrategy:
   type: RollingUpdate

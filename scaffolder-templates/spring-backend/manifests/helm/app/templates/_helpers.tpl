@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "quarkus-backend.name" -}}
+{{- define "spring-backend.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "quarkus-backend.fullname" -}}
+{{- define "spring-backend.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,7 +26,7 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "quarkus-backend.chart" -}}
+{{- define "spring-backend.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -37,10 +37,10 @@ Common labels
 backstage.io/kubernetes-id: ${{values.component_id}}
 {{- end }}
 
-{{- define "quarkus-backend.labels" -}}
+{{- define "spring-backend.labels" -}}
 backstage.io/kubernetes-id: ${{values.component_id}}
-helm.sh/chart: {{ include "quarkus-backend.chart" . }}
-{{ include "quarkus-backend.selectorLabels" . }}
+helm.sh/chart: {{ include "spring-backend.chart" . }}
+{{ include "spring-backend.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -50,20 +50,20 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "quarkus-backend.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "quarkus-backend.name" . }}
+{{- define "spring-backend.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "spring-backend.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "quarkus-backend.serviceAccountName" -}}
+{{- define "spring-backend.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "quarkus-backend.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "spring-backend.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
 
-{{- define "quarkus-backend.registry" -}}image-registry.openshift-image-registry.svc:5000/{{ .Release.Namespace }}/{{- end -}}
+{{- define "spring-backend.registry" -}}image-registry.openshift-image-registry.svc:5000/{{ .Release.Namespace }}/{{- end -}}
