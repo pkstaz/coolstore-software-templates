@@ -25,6 +25,7 @@ spec:
           - mountPath: /secrets
             name: webhook-secret
       restartPolicy: Never
+      serviceAccountName: pipeline
       volumes:
       - name: {{ .Values.app.name }}-script-vol
         configMap:
@@ -35,3 +36,4 @@ spec:
       - name: webhook-secret
         secret:
           secretName: {{ .Values.app.name }}-webhook-secret
+      

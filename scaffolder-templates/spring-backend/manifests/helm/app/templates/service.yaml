@@ -13,6 +13,6 @@ spec:
 metadata:
   name: {{ .Values.applicationName }}
   labels:
-    {{- include "quarkus-backend.labels" . | nindent 4 }}
+    {{- include "spring-backend.labels" . | nindent 4 }}
   annotations:
     description: The web server's http port
