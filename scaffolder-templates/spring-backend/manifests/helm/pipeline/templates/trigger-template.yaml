@@ -34,9 +34,14 @@ spec:
           name: {{ .Values.app.name }}
         serviceAccountName: pipeline
         workspaces:
-          - name: maven-settings
-            emptyDir: {}
           - name: source
-            persistentVolumeClaim:
-              claimName: {{ .Values.app.name }}-maven-local-m2-pvc
+            volumeClaimTemplate:
+              spec:
+                accessModes:
+                  - ReadWriteOnce
+                resources:
+                  requests:
+                    storage: 1Gi
+          - emptyDir: {}
+            name: maven-settings
 
