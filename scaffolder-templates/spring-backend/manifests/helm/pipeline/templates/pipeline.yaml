@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: {{ .Values.app.name }}
+  name: {{ .Values.app.name }}-pipeline
   labels:
     type: pipeline
     backstage.io/kubernetes-id: {{ .Values.app.name }}
@@ -12,14 +12,10 @@ spec:
     default: {{ .Values.git.repo }}
   - name: git-branch
     default: {{ .Values.git.branch }}
-  - name: target-namespace
-    default: {{ .Values.app.namespace }}
   - name: output-image
     description: reference of the image that will get created
     default: {{ include "image.url" . }}
     type: string
-  workspaces:
-  - name: source
   tasks:
   - name: fetch-repository
     params:
