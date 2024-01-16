@@ -16,6 +16,12 @@ spec:
     description: reference of the image that will get created
     default: {{ include "image.url" . }}
     type: string
+  - default: .
+    name: PATH_CONTEXT
+    type: string
+  - default: 16-ubi8
+    name: VERSION
+    type: string
   tasks:
   - name: fetch-repository
     params:
@@ -30,41 +36,24 @@ spec:
       name: git-clone
     workspaces:
       - name: output
-        workspace: source
-  - name: install-dependencies
-    taskRef:
-      name: npm
-      kind: Task
-    runAfter:
-      - fetch-repository
-    workspaces:
-      - name: source
-        workspace: source
-  - name: build-and-push
+        workspace: workspace
+  - name: build
     params:
-      - name: STORAGE_DRIVER
-        value: vfs
       - name: IMAGE
         value: $(params.output-image)
-      - name: DOCKERFILE
-        value: ./Dockerfile
-      - name: CONTEXT
-        value: .
       - name: TLSVERIFY
-        value: "true"
-      - name: SKIP_PUSH
-        value: "false"
-      - name: FORMAT
-        value: oci
-      - name: BUILDER_IMAGE
-        value: registry.redhat.io/rhel8/buildah@sha256:0a86ecbdfbe86e9d225b7fe4b090a0dd6d323f8afdfdf2bd933ff223ddb53320
+        value: 'false'
+      - name: PATH_CONTEXT
+        value: $(params.PATH_CONTEXT)
+      - name: VERSION
+        value: $(params.VERSION)
     runAfter:
-    - install-dependencies
+      - fetch-repository
     taskRef:
       kind: ClusterTask
-      name: buildah
+      name: s2i-nodejs
     workspaces:
       - name: source
-        workspace: source
+        workspace: workspace
   workspaces:
-    - name: source
+    - name: workspace

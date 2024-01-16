@@ -3,7 +3,7 @@ kind: Job
 metadata:
   name: {{ .Values.app.name }}-pipeline-run-job
   annotations:
-    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook: PostSync 
     argocd.argoproj.io/hook-delete-policy: HookSucceeded
 spec:
   selector: {}
@@ -18,7 +18,7 @@ spec:
           - /bin/sh
           - -c
           - |
-            tkn pipeline start {{ .Values.app.name }}-pipeline --use-param-defaults -w name=source,claimName={{ .Values.app.name }}-pipeline-pvc
+            tkn pipeline start {{ .Values.app.name }}-pipeline --use-param-defaults -w name=workspace,claimName={{ .Values.app.name }}-pipeline-pvc
           env:
             - name: HOME
               value: /tekton/home

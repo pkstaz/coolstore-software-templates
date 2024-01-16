@@ -17,9 +17,9 @@ spec:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        generateName: {{ .Values.app.name }}-
+        name: {{ .Values.app.name }}-$(uid)
         labels:
-          backstage.io/kubernetes-id: {{ .Values.app.name }}
+          backstage.io/kubernetes-id:  {{ .Values.app.name }}
       spec:
         params:
           - name: git-url
@@ -28,12 +28,16 @@ spec:
             value: $(tt.params.git-revision)
           - name: output-image
             value: $(tt.params.output-image)
+          - name: PATH_CONTEXT
+            value: .
+          - name: VERSION
+            value: 16-ubi8
         pipelineRef:
           name: {{ .Values.app.name }}-pipeline
         serviceAccountName: pipeline
         timeout: 1h0m0s
         workspaces:
-          - name: source
+          - name: workspace
             volumeClaimTemplate:
               spec:
                 accessModes:
@@ -41,3 +45,4 @@ spec:
                 resources:
                   requests:
                     storage: 1Gi
+

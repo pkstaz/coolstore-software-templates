@@ -20,7 +20,7 @@ image:
 host: ""
 
 pipelineStorage:
-  pvcSize: 3Gi
+  pvcSize: 1Gi
   storageClassName: ""
 
 targetEnvironment: dev
