@@ -6,7 +6,7 @@ metadata:
 spec:
   resources:
     requests:
-      storage: 3Gi
+      storage: 1Gi
   volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
@@ -18,7 +18,7 @@ metadata:
 spec:
   resources:
     requests:
-      storage: 3Gi
+      storage: 1Gi
   volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
