@@ -1,0 +1,9 @@
+FROM registry.access.redhat.com/ubi8/openjdk-11
+ENV COMPONENT_CATALOG_HOST=localhost
+ENV COMPONENT_CATALOG_PORT=9000
+ENV COMPONENT_INVENTORY_HOST=localhost
+ENV COMPONENT_INVENTORY_PORT=8080
+ENV PROFILE=prod
+ADD target/*.jar app.jar
+EXPOSE 8090
+CMD java -jar app.jar
