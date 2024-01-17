@@ -33,7 +33,7 @@ spec:
   owner: ${{values.owner | dump}}
   system: workshop-system-${{values.component_id}}
   providesApis:
-    - backend-api-${{values.namespace}}
+    - catalog-app-${{values.user_id}}
 ---
 apiVersion: backstage.io/v1alpha1
 kind: System
