@@ -83,7 +83,7 @@ spec:
         targetPath: ./source
         values:
           group: ${{parameters.group}}
-          owner: ${{parameters.owner}}
+          owner: default/${{parameters.owner}}
           cluster_id: ${{parameters.cluster_id}}
           namespace: ${{parameters.namespace}}
           component_id: ${{parameters.component_id}}

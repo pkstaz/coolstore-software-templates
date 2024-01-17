@@ -2,8 +2,17 @@ applicationName: ${{values.component_id}}
 namespace: ${{values.namespace}}
 targetEnvironment: dev
 version: "1.0.0"
-port: 8080
-targetPort: 8080
+portName: 8080-tcp
+port: 8090
+targetPort: 8090
+portHTTPS: 8443
+targetPortHTTPS: 8443
+portNameHTTPS: 8443-tcp
+portName8778: 8778-tcp
+port8778: 8778
+targetPort8778: 8778
+
+
 routes: []
 deploymentStrategy:
   type: RollingUpdate
@@ -11,12 +20,29 @@ deploymentStrategy:
   rollingMaxUnavailable: 20%
 replicaCount: 1
 health:
-  livenessEndpoint: /health
-  readinessEndpoint: /health
+  livenessEndpoint: /actuator/health
+  readinessEndpoint: /actuator/health
   probeDelay: 5
   probePeriod: 10
   probeTimeout: 2
-gateway: https://${{values.component_id}}-${{values.namespace}}${{values.cluster}}/
+env: 
+    - name: COMPONENT_CATALOG_HOST
+      value: catalog-app-${{values.user_id}}
+    - name: COMPONENT_CATALOG_PORT
+      value: '8080'
+    - name: COMPONENT_INVENTORY_HOST
+      value: inventory-app-${{values.user_id}}
+    - name: COMPONENT_INVENTORY_PORT
+      value: '8080'
+autoscaling:
+  enabled: false
+namespace:
+  enabled: true
+  name: ${{values.namespace}}
+  argocd:
+    name: ${{values.component_id}}
+
+replicaCount: 1
 
 image:
   repository: ${{values.image_host}}/${{values.image_name}}
@@ -31,7 +57,7 @@ serviceAccount:
   annotations: {}
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
-  name: ""
+  name: "default"
 
 namespace:
   enabled: true

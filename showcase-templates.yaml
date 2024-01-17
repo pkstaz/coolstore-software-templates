@@ -8,3 +8,4 @@ spec:
   targets:
     - scaffolder-templates/frontend/template.yaml
     - scaffolder-templates/spring-backend/template.yaml
+    - scaffolder-templates/quarkus-backend/template.yaml

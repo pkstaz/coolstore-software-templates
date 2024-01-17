@@ -9,10 +9,10 @@ spec:
     port: {{ .Values.portHTTPS }}
     targetPort: {{ .Values.targetPortHTTPS }}
   selector:
-    {{- include "spring-backend.selectorLabels" $ | nindent 4 }}
+    {{- include "quarkus-backend.selectorLabels" $ | nindent 4 }}
 metadata:
   name: {{ .Values.applicationName }}
   labels:
-    {{- include "spring-backend.labels" . | nindent 4 }}
+    {{- include "quarkus-backend.labels" . | nindent 4 }}
   annotations:
     description: The web server's http port
