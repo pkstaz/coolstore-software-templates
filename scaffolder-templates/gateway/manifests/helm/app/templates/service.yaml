@@ -1,0 +1,21 @@
+kind: Service
+apiVersion: v1
+spec:
+  ports:
+  - name: {{ .Values.portName }}
+    port: {{ .Values.port }}
+    targetPort: {{ .Values.targetPort }}
+  - name: {{ .Values.portNameHTTPS }}
+    port: {{ .Values.portHTTPS }}
+    targetPort: {{ .Values.targetPortHTTPS }}
+  - name: {{ .Values.portName8778 }}
+    port: {{ .Values.port8778 }}
+    targetPort: {{ .Values.targetPort8778 }}
+  selector:
+    {{- include "java-backend.selectorLabels" $ | nindent 4 }}
+metadata:
+  name: {{ .Values.applicationName }}
+  labels:
+    {{- include "java-backend.labels" . | nindent 4 }}
+  annotations:
+    description: The web server's http port

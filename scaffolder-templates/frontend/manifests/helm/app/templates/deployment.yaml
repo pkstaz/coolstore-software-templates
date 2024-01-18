@@ -1,0 +1,48 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: {{ .Values.applicationName }}
+  labels:
+    {{- include "backstage.labels" . | nindent 4 }}
+    {{- include "frontend.labels" . | nindent 4 }}
+spec:
+  strategy:
+    type: {{ .Values.deploymentStrategy.type }}
+    {{- if eq .Values.deploymentStrategy.type "RollingUpdate" }}
+    {{- with .Values.deploymentStrategy }}
+    rollingUpdate:
+      maxSurge: {{ .rollingMaxSurge }}
+      maxUnavailable: {{ .rollingMaxUnavailable }}
+    {{- end }}
+    {{- end }}
+    {{- if eq .Values.deploymentStrategy.type "Recreate" }}
+    recreateParams:
+      timeoutSeconds: {{ .Values.deploymentStrategy.timeout }}
+    {{- end }}
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "frontend.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "backstage.labels" . | nindent 8 }}
+        {{- include "frontend.selectorLabels" . | nindent 8 }}
+    spec:
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriod | default 60 }}
+      serviceAccountName: {{ include "frontend.serviceAccountName" . }}
+      containers:
+      - name: {{ .Values.applicationName }}
+        env:
+        - name: SECURE_COOLSTORE_GW_ENDPOINT
+          value: {{ .Values.gateway }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: Always
+        ports:
+        - name: http-t
+          containerPort: {{ .Values.port }}
+          protocol: TCP
