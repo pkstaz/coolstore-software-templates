@@ -28,14 +28,14 @@ spec:
   type: service
   lifecycle: production
   owner: ${{values.owner | dump}}
-  system: workshop-system-${{values.component_id}}
+  system: workshop-system-${{values.namespace}}
   consumesApis:
     - gateway-api-${{values.user_id}}-${{values.namespace}}
 ---
 apiVersion: backstage.io/v1alpha1
 kind: System
 metadata:
-  name: workshop-system-${{values.component_id}}
+  name: workshop-system-${{values.namespace}}
   tags:
     - backstage
     - janus-idp
