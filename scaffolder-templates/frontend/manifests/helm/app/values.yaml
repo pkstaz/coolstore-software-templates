@@ -18,6 +18,9 @@ health:
   probeTimeout: 2
 gateway: https://gateway-app-${{values.user_id}}-${{values.namespace}}${{values.cluster}}/
 
+app:
+  namespace: ${{values.namespace}}
+
 image:
   repository: ${{values.image_host}}/${{values.image_name}}
   pullPolicy: Always

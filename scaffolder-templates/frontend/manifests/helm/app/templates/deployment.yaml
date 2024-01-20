@@ -4,6 +4,10 @@ metadata:
   name: {{ .Values.applicationName }}
   annotations:
     image.openshift.io/triggers: >-
+      [{"from":{"kind":"ImageStreamTag","name":"{{ .Values.applicationName }}:{{ .Values.image.tag | default .Chart.AppVersion }}","namespace":"{{ .Values.app.namespace }}"},"fieldPath":"spec.template.spec.containers[?(@.name==\"{{ .Values.applicationName }}\")].image","pause":"false"}]
+
+  annotations:
+    image.openshift.io/triggers: >-
       [{"from":{"kind":"ImageStreamTag","name":"{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}","namespace":"{{ .Values.namespace }}"},"fieldPath":"spec.template.spec.containers[?(@.name==\"frontend\")].image","pause":"false"}]
   labels:
     {{- include "backstage.labels" . | nindent 4 }}

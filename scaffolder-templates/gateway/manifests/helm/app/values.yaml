@@ -11,6 +11,8 @@ portNameHTTPS: 8443-tcp
 portName8778: 8778-tcp
 port8778: 8778
 targetPort8778: 8778
+app:
+  namespace: ${{values.namespace}}
 
 
 routes: []

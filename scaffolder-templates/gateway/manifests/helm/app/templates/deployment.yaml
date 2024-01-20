@@ -2,6 +2,9 @@ kind: Deployment
 apiVersion: apps/v1
 metadata:
   name: {{ .Values.applicationName }}
+  annotations:
+    image.openshift.io/triggers: >-
+      [{"from":{"kind":"ImageStreamTag","name":"{{ .Values.applicationName }}:{{ .Values.image.tag | default .Chart.AppVersion }}","namespace":"{{ .Values.app.namespace }}"},"fieldPath":"spec.template.spec.containers[?(@.name==\"{{ .Values.applicationName }}\")].image","pause":"false"}]
   labels:
     {{- include "backstage.labels" . | nindent 4 }}
     {{- include "java-backend.labels" . | nindent 4 }}

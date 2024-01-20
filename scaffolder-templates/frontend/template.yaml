@@ -88,6 +88,7 @@ spec:
           component_id: ${{parameters.component_id}}
           host: ${{ parameters.host }}
           repoName: ${{parameters.component_id}}
+          user_id: ${{parameters.owner}}
     - id: publishSource
       name: Publishing to Source Code Repository
       action: publish:gitlab

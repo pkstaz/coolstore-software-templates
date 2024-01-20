@@ -9,6 +9,9 @@ portHTTPS: 8443
 targetPortHTTPS: 8443
 portNameHTTPS: 8443-tcp
 
+app:
+  namespace: ${{values.namespace}}
+
 routes: []
 deploymentStrategy:
   type: RollingUpdate
