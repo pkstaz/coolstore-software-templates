@@ -76,8 +76,8 @@ data:
             body_format: form-urlencoded
             body:
               "state" : "opened"
-              "title" : "Update this"
-              "description" : "Change the title"
+              "title" : "Update Title"
+              "description" : "Title does not match with the requested by PM. Update the frontend application title by adding your preferred city: Now: Red Hat Cool Store Sample: Red Hat Cool Store - Raleigh"
               "weight": null
             headers:
               PRIVATE-TOKEN: '{{ "{{" }} git_token {{ "}}" }}'
