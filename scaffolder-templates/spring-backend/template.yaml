@@ -2,8 +2,8 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
   name: app-backend-template
-  title: Spring Backend Application
-  description: creates the spring backend app for the workshop
+  title: Spring Boot Backend Application
+  description: creates the spring boot backend app for the workshop
   tags:
     - java
     - spring
