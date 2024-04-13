@@ -10,7 +10,7 @@ metadata:
     - maven
     - workshop
 spec:
-  owner: dev-mad
+  owner: developer
   type: service
 
   parameters:
@@ -44,7 +44,7 @@ spec:
           title: Namespace
           type: string
           description: Namespace
-          default: rhdhub-userN
+          default: coolstore
         owner:
           title: Owner
           type: string
@@ -71,7 +71,7 @@ spec:
           description: Image tag to use for storing in the internal registry
         component_id:
           title: Component ID
-          default: gateway-app-userN
+          default: gateway-app
           type: string
           description: Comp Id
   steps:
@@ -145,7 +145,7 @@ spec:
       input:
         appName: ${{parameters.component_id}}-gitops
         argoInstance: main
-        namespace: rhdhub
+        namespace: coolstore
         repoUrl: https://${{ parameters.host }}/${{ parameters.group }}/${{parameters.component_id}}-gitops.git
         path: 'argocd/'
   output:
