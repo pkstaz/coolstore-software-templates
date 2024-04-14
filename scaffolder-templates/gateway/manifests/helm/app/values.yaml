@@ -29,11 +29,11 @@ health:
   probeTimeout: 2
 env: 
     - name: COMPONENT_CATALOG_HOST
-      value: catalog-apps
+      value: catalog-backend-app
     - name: COMPONENT_CATALOG_PORT
       value: '8080'
     - name: COMPONENT_INVENTORY_HOST
-      value: inventory-app
+      value: inventory-backend-app
     - name: COMPONENT_INVENTORY_PORT
       value: '8080'
 autoscaling:

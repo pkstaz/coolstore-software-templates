@@ -70,7 +70,7 @@ spec:
           description: Image tag to use for storing in the internal registry
         component_id:
           title: Component ID
-          default: frontend-app
+          default: frontend-application
           type: string
           description: Comp Id
   steps:
