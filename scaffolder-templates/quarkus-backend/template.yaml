@@ -71,7 +71,7 @@ spec:
           description: Image tag to use for storing in the internal registry
         component_id:
           title: Component ID
-          default: inventory-backend-app
+          default: inventory-backend-demo
           type: string
           description: Comp Id
   steps:
