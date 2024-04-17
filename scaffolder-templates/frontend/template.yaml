@@ -43,7 +43,7 @@ spec:
           title: Namespace
           type: string
           description: Namespace
-          default: rhdhub-userN
+          default: globlex-devhub-userN
         owner:
           title: Owner
           type: string
