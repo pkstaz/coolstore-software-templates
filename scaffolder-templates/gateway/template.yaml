@@ -44,7 +44,7 @@ spec:
           title: Namespace
           type: string
           description: Namespace
-          default: globlex-devhub-userN
+          default: globex-devhub-userN
         owner:
           title: Owner
           type: string
