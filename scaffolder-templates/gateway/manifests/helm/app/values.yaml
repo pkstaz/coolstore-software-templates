@@ -29,11 +29,11 @@ health:
   probeTimeout: 2
 env: 
     - name: COMPONENT_CATALOG_HOST
-      value: ${{parameters.component_id}}
+      value: ${{values.component_id}}
     - name: COMPONENT_CATALOG_PORT
       value: '8080'
     - name: COMPONENT_INVENTORY_HOST
-      value: ${{parameters.component_id}}
+      value: ${{values.component_id}}
     - name: COMPONENT_INVENTORY_PORT
       value: '8080'
 autoscaling:
