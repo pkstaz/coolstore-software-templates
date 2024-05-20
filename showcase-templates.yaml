@@ -10,3 +10,5 @@ spec:
     - scaffolder-templates/spring-backend/template.yaml
     - scaffolder-templates/quarkus-backend/template.yaml
     - scaffolder-templates/gateway/template.yaml
+    - scaffolder-templates/wheres-teddy/template.yaml
+    - scaffolder-templates/vote-ui-python/template.yaml

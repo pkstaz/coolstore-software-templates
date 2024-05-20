@@ -1,0 +1,96 @@
+---
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: {{ include "tomcat.fullname" . }}
+  labels:
+    {{- include "tomcat.labels" . | nindent 4 }}
+spec:
+  running: true
+  template:
+    metadata:
+      annotations:
+        vm.kubevirt.io/flavor: medium
+        vm.kubevirt.io/os: rhel8
+        vm.kubevirt.io/workload: server
+      labels:
+        kubevirt.io/domain: {{ include "tomcat.fullname" . }}
+        kubevirt.io/size: medium
+        {{- include "tomcat.labels" . | nindent 8 }}
+    spec:
+      domain:
+        devices:
+          disks:
+          - name: vol-0
+            disk:
+              bus: virtio
+          - name: cloudinitdisk
+            disk:
+              bus: virtio
+          interfaces:
+          - name: default
+            masquerade: {}
+          {{- if .Values.staticIP }}
+          - bridge: {}
+            name: nic-secondary
+          {{- end }}
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
+      networks:
+      - name: default
+        pod: {}
+        {{- if .Values.staticIP }}
+      - multus:
+          networkName: default/tomcat-net
+        name: nic-secondary
+      {{- end }}
+      livenessProbe:
+        httpGet:
+          path: /health/live
+          port: 8080
+        initialDelaySeconds: 60
+        periodSeconds: 30
+        timeoutSeconds: 10
+      readinessProbe:
+        httpGet:
+          path: /health/ready
+          port: 8080
+        initialDelaySeconds: 60
+        periodSeconds: 30
+        timeoutSeconds: 10
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+      - name: vol-0
+        dataVolume:
+          name: {{ include "tomcat.fullname" . }}
+      - cloudInitNoCloud:
+          userData: |-
+            #cloud-config
+            user: cloud-user
+            password: openshift
+            chpasswd: { expire: False }
+            ssh_pwauth: true
+            {{- if .Values.staticIP }}
+            bootcmd:
+            - nmcli connection modify "Wired connection 2" ipv4.addresses {{ .Values.staticIP }} ipv4.method manual
+            - nmcli dev reapply eth1
+            {{- end }}
+        name: cloudinitdisk
+  dataVolumeTemplates:
+  - metadata:
+      name: {{ include "tomcat.fullname" . }}
+    spec:
+      source:
+        http:
+          url: {{ .Values.image.url }}
+      storage:
+        resources:
+          requests:
+            storage: {{ .Values.storage.pvcSize }}
