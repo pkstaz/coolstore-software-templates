@@ -12,3 +12,4 @@ spec:
     - scaffolder-templates/gateway/template.yaml
     - scaffolder-templates/wheres-teddy/template.yaml
     - scaffolder-templates/vote-ui-python/template.yaml
+    - scaffolder-templates/tomcat-vm/template.yaml
