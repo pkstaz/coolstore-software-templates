@@ -141,7 +141,6 @@ spec:
         path: 'argocd/'
   output:
     links:
-    links:
       - title: Source Code Repository
         url: ${{steps.publishSource.output.remoteUrl}}
       - title: Open Component in catalog
