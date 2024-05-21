@@ -136,7 +136,7 @@ spec:
       input:
         appName: ${{parameters.component_id}}-gitops
         argoInstance: main
-        namespace: rhdhub
+        namespace: backstage
         repoUrl: https://${{ parameters.host }}/${{ parameters.group }}/${{parameters.component_id}}-gitops.git
         path: 'argocd/'
   output:

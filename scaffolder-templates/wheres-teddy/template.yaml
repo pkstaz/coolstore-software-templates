@@ -14,18 +14,21 @@ spec:
   type: service
 
   parameters:
-    - title: Provide information about the GitHub location
+    - title: Provide information about the GitLab location
       required:
-        - githubOrg
+        - group
+        - host
       properties:
-        githubOrg:
-          title: GitHub Organization
+        host:
+          title: Repo Host
           type: string
-          default: WindTurbineInc
-        description:
-          title: Description
+          description: Your SCM host
+          default: gitlab-gitlab.apps.cluster-xxxxx.xxxxx.sandboxXXX.opentlc.com
+        group:
+          title: Repo Group
           type: string
-          description: Help others understand what this component is for
+          description: Your SCM host organization/group
+          default: rhdhub
     - title: Provide information about the new component
       required:
         - cluster_id
@@ -84,9 +87,10 @@ spec:
         url: ./skeleton
         targetPath: ./source
         values:
-          githubOrg: ${{parameters.githubOrg}}
+          group: ${{parameters.group}}
           repoName: ${{parameters.namespace}}-wheres-teddy
           owner: ${{parameters.owner}}
+          host: ${{ parameters.host }}
           cluster_id: ${{parameters.cluster_id}}
           namespace: ${{parameters.namespace}}
           component_id: ${{parameters.namespace}}-wheres-teddy-app
@@ -94,13 +98,11 @@ spec:
           modelmesh_port: ${{parameters.modelmesh_port}}
     - id: publishSource
       name: Publishing to Source Code Repository
-      action: publish:github
+      action: publish:gitlab
       input:
         sourcePath: ./source
-        allowedHosts:
-          - github.com
         description: ${{parameters.description}}
-        repoUrl: github.com?owner=${{parameters.githubOrg}}&repo=${{parameters.namespace}}-wheres-teddy
+        repoUrl: ${{ parameters.host }}?owner=${{ parameters.group }}&repo=${{parameters.namespace}}-wheres-teddy
         defaultBranch: main
         protectDefaultBranch: false
         repoVisibility: public    
@@ -119,10 +121,10 @@ spec:
         values:
           component_id: ${{parameters.namespace}}-wheres-teddy-app
           description: ${{parameters.description}}
-          destination: https://github.com/${{parameters.githubOrg}}/${{parameters.namespace}}-wheres-teddy-gitops
-          source_repository: https://github.com/${{parameters.githubOrg}}/${{parameters.namespace}}-wheres-teddy
+          destination:  https://${{ parameters.host }}/${{ parameters.group }}/${{parameters.component_id}}-gitops.git
+          source_repository: https://${{ parameters.host }}/${{ parameters.group }}/${{parameters.component_id}}.git
           repository_name: ${{parameters.namespace}}-wheres-teddy
-          git_owner: ${{parameters.githubOrg}}
+          group: ${{parameters.group}}
           cluster: ${{parameters.cluster_id}}
           namespace: ${{parameters.namespace}}
           image_host: ${{parameters.image_host}}
@@ -130,12 +132,13 @@ spec:
           image_tag: ${{parameters.image_tag}}
           modelmesh_host: ${{parameters.modelmesh_host}}
           modelmesh_port: ${{parameters.modelmesh_port}}
+          git_host: ${{ parameters.host }}
         targetPath: ./tenant-gitops
     - id: publishGitops
       name: Publishing to Deployment Resource Repository
       action: publish:github
       input:
-        repoUrl: github.com?owner=${{parameters.githubOrg}}&repo=${{parameters.namespace}}-wheres-teddy-gitops
+        repoUrl: ${{ parameters.host }}?owner=${{ parameters.group }}&repo=${{parameters.component_id}}-gitops
         title: gitops resources for ${{parameters.namespace}}-wheres-teddy-app
         description: gitops resources for ${{parameters.namespace}}-wheres-teddy-app
         sourcePath: ./tenant-gitops
@@ -146,10 +149,10 @@ spec:
       name: Create ArgoCD Resources
       action: argocd:create-resources
       input:
-        appName: ${{parameters.namespace}}-wheres-teddy-app-bootstrap
+        appName: ${{parameters.component_id}}-gitops
         argoInstance: main
-        namespace: janus-argocd
-        repoUrl: https://github.com/${{parameters.githubOrg}}/${{parameters.namespace}}-wheres-teddy-gitops.git
+        namespace: backstage
+        repoUrl: https://${{ parameters.host }}/${{ parameters.group }}/${{parameters.component_id}}-gitops.git
         path: 'argocd/'
   output:
     links:
