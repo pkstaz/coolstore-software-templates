@@ -68,6 +68,7 @@ spec:
       required:
         - image_host
         - image_tag
+        - component_id
       properties:
         image_host:
           title: Image Host
@@ -79,6 +80,11 @@ spec:
           default: latest
           type: string
           description: Image tag to use for storing in the internal registry
+        component_id:
+          title: Component ID
+          default: wheres-teddy
+          type: string
+          description: Comp Id
   steps:
     - id: templateSource
       name: Generating the source code component
@@ -88,12 +94,12 @@ spec:
         targetPath: ./source
         values:
           group: ${{parameters.group}}
-          repoName: ${{parameters.namespace}}-wheres-teddy
+          repoName: ${{parameters.component_id}}
           owner: ${{parameters.owner}}
           host: ${{ parameters.host }}
           cluster_id: ${{parameters.cluster_id}}
           namespace: ${{parameters.namespace}}
-          component_id: ${{parameters.namespace}}-wheres-teddy-app
+          component_id: ${{parameters.component_id}}
           modelmesh_host: ${{parameters.modelmesh_host}}
           modelmesh_port: ${{parameters.modelmesh_port}}
     - id: publishSource
@@ -102,7 +108,7 @@ spec:
       input:
         sourcePath: ./source
         description: ${{parameters.description}}
-        repoUrl: ${{ parameters.host }}?owner=${{ parameters.group }}&repo=${{parameters.namespace}}-wheres-teddy
+        repoUrl: ${{ parameters.host }}?owner=${{ parameters.group }}&repo=${{parameters.component_id}}
         defaultBranch: main
         protectDefaultBranch: false
         repoVisibility: public    
@@ -119,11 +125,11 @@ spec:
         url: ./manifests
         copyWithoutTemplating: []
         values:
-          component_id: ${{parameters.namespace}}-wheres-teddy-app
+          component_id: ${{parameters.component_id}}
           description: ${{parameters.description}}
           destination:  https://${{ parameters.host }}/${{ parameters.group }}/${{parameters.component_id}}-gitops.git
           source_repository: https://${{ parameters.host }}/${{ parameters.group }}/${{parameters.component_id}}.git
-          repository_name: ${{parameters.namespace}}-wheres-teddy
+          repository_name: ${{parameters.component_id}}
           group: ${{parameters.group}}
           cluster: ${{parameters.cluster_id}}
           namespace: ${{parameters.namespace}}
@@ -139,8 +145,8 @@ spec:
       action: publish:gitlab
       input:
         repoUrl: ${{ parameters.host }}?owner=${{ parameters.group }}&repo=${{parameters.component_id}}-gitops
-        title: gitops resources for ${{parameters.namespace}}-wheres-teddy-app
-        description: gitops resources for ${{parameters.namespace}}-wheres-teddy-app
+        title: gitops resources for ${{parameters.component_id}}
+        description: gitops resources for ${{parameters.component_id}}
         sourcePath: ./tenant-gitops
         defaultBranch: main
         protectDefaultBranch: false

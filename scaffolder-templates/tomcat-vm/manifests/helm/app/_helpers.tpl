@@ -46,7 +46,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Selector labels
 */}}
 {{- define "tomcat.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "tomcat.name" . }}
+app.kubernetes.io/name: tomcat-vm{{ include "tomcat.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
