@@ -136,7 +136,7 @@ spec:
         targetPath: ./tenant-gitops
     - id: publishGitops
       name: Publishing to Deployment Resource Repository
-      action: publish:github
+      action: publish:gitlab
       input:
         repoUrl: ${{ parameters.host }}?owner=${{ parameters.group }}&repo=${{parameters.component_id}}-gitops
         title: gitops resources for ${{parameters.namespace}}-wheres-teddy-app
