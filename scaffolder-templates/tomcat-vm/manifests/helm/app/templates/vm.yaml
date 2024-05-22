@@ -5,6 +5,7 @@ metadata:
   name: {{ include "tomcat.fullname" . }}
   labels:
     {{- include "tomcat.labels" . | nindent 4 }}
+    {{- include "backstage.labels" . | nindent 4 }}
 spec:
   running: true
   template:
@@ -17,6 +18,7 @@ spec:
         kubevirt.io/domain: {{ include "tomcat.fullname" . }}
         kubevirt.io/size: medium
         {{- include "tomcat.labels" . | nindent 8 }}
+        {{- include "backstage.labels" . | nindent 8 }}   
     spec:
       domain:
         devices:
@@ -39,11 +41,6 @@ spec:
       networks:
       - name: default
         pod: {}
-        {{- if .Values.staticIP }}
-      - multus:
-          networkName: default/tomcat-net
-        name: nic-secondary
-      {{- end }}
       livenessProbe:
         httpGet:
           path: /health/live
@@ -58,18 +55,15 @@ spec:
         initialDelaySeconds: 60
         periodSeconds: 30
         timeoutSeconds: 10
-      {{- with .Values.nodeSelector }}
       nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
+        node-role.kubernetes.io/metal: ''
       tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        - key: metal
+          operator: Exists
       volumes:
       - name: vol-0
         dataVolume:
-          name: {{ include "tomcat.fullname" . }}
+          name: tomcat
       - cloudInitNoCloud:
           userData: |-
             #cloud-config
@@ -85,7 +79,7 @@ spec:
         name: cloudinitdisk
   dataVolumeTemplates:
   - metadata:
-      name: {{ include "tomcat.fullname" . }}
+      name: tomcat
     spec:
       source:
         http:
