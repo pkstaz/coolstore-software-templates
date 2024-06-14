@@ -58,15 +58,15 @@ spec:
         - component_id
       properties:
         image_host:
-          title: Image URL
+          title: Data Source
           type: string
-          description: URL for storing image
+          description: Name of the DataSource to clone
           default: https://gpte-public.s3.amazonaws.com/ama_demo/tomcat-mad.qcow2
         component_id:
-          title: Component ID
+          title: NAME
           default: tomcat-vm-template
           type: string
-          description: Comp Id
+          description: VM name
   steps:
     - id: templateSource
       name: Generating the source code component
