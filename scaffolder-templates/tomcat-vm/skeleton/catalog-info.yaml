@@ -20,6 +20,10 @@ metadata:
     - url: https://console-openshift-console${{values.cluster_id}}/k8s/ns/${{values.namespace}}/kubevirt.io~v1~VirtualMachine/${{values.component_id}}
       title: Virtual Machine
       icon: web
+    - url: https://console-openshift-console${{values.cluster_id}}/k8s/ns/legacy-vms/kubevirt.io~v1~VirtualMachine/${{values.component_id}}/console/standalone
+      title: VNC console
+      icone: web
+
 spec:
   type: service
   lifecycle: production

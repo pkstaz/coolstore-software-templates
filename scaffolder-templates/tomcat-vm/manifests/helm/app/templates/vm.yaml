@@ -23,12 +23,12 @@ spec:
       domain:
         devices:
           disks:
-          - name: vol-0
-            disk:
-              bus: virtio
-          - name: cloudinitdisk
-            disk:
-              bus: virtio
+            - name: vol-0
+              disk:
+                bus: virtio
+            - name: cloudinitdisk
+              disk:
+                bus: virtio
           interfaces:
           - name: default
             masquerade: {}
@@ -78,13 +78,14 @@ spec:
             {{- end }}
         name: cloudinitdisk
   dataVolumeTemplates:
-  - metadata:
-      name: tomcat
-    spec:
-      source:
-        http:
-          url: {{ .Values.image.url }}
-      storage:
-        resources:
-          requests:
-            storage: {{ .Values.storage.pvcSize }}
+    - metadata:
+        creationTimestamp: null
+        name: tomcat
+      spec:
+        storage:
+          resources:
+            requests:
+              storage: 40Gi
+        source:
+          http:
+            url: {{ .Values.image.url }}

@@ -35,12 +35,18 @@ Common labels
 */}}
 {{- define "tomcat.labels" -}}
 helm.sh/chart: {{ include "tomcat.chart" . }}
+backstage.io/kubernetes-id: tomcat-vm{{ include "tomcat.name" . }}
 {{ include "tomcat.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
+
+{{- define "backstage.labels" -}}
+backstage.io/kubernetes-id: tomcat-vm{{ include "tomcat.name" . }}
+{{- end }}
+
 
 {{/*
 Selector labels
