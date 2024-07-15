@@ -9,8 +9,8 @@ metadata:
     - frontend
     - workshop
 spec:
-  owner: dev-mad
-  type: service
+  owner: frontend-development-team
+  type: UI
 
   parameters:
     - title: Provide information about the GitLab location

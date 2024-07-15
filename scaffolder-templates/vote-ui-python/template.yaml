@@ -11,8 +11,8 @@ metadata:
     - argo
     - vote
 spec:
-  owner: rhdh
-  type: service
+  owner: AI-team
+  type: inference app
   parameters:
     - title: Provide Information for Application
       required:

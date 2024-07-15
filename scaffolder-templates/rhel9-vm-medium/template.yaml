@@ -1,11 +1,11 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: tomcat-vm-template
-  title: Tomcat VM Template
-  description: creates a Tomcat VM
+  name: rhel9-vm-medium-template
+  title: RHEL9 VM Medium Template
+  description: creates a RHEL9 VM Medium
   tags:
-    - tomcat
+    - rhel9-medium
     - vm
     - workshop
 spec:
@@ -43,7 +43,7 @@ spec:
           title: Namespace
           type: string
           description: Namespace
-          default: rhdhub-userN
+          default: rhdhub-user1
         owner:
           title: Owner
           type: string
@@ -54,19 +54,13 @@ spec:
               kind: [User]
     - title: Provide Build Information
       required:
-        - image_host
         - component_id
       properties:
-        image_host:
-          title: Data Source
-          type: string
-          description: Name of the DataSource to clone
-          default: https://gpte-public.s3.amazonaws.com/ama_demo/tomcat-mad.qcow2
         component_id:
-          title: NAME
-          default: tomcat-vm-template
+          title: Component ID
+          default: app-legacy
           type: string
-          description: VM name
+          description: Comp Id
   steps:
     - id: templateSource
       name: Generating the source code component
@@ -115,8 +109,6 @@ spec:
           org: ${{parameters.group}}
           cluster: ${{parameters.cluster_id}}
           namespace: ${{parameters.namespace}}
-          image_host: ${{parameters.image_host}}/${{parameters.namespace}}
-          image_name: ${{parameters.component_id}}
           user_id: ${{parameters.owner}}
         targetPath: ./tenant-gitops
     - id: publishGitops

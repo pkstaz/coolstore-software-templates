@@ -10,7 +10,7 @@ metadata:
     - maven
     - workshop
 spec:
-  owner: dev-mad
+  owner: java-development-team
   type: service
 
   parameters:

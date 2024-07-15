@@ -35,7 +35,7 @@ Common labels
 */}}
 {{- define "tomcat.labels" -}}
 helm.sh/chart: {{ include "tomcat.chart" . }}
-backstage.io/kubernetes-id: {{ include "tomcat.fullname" . }}
+backstage.io/kubernetes-id: tomcat-vm{{ include "tomcat.name" . }}
 {{ include "tomcat.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}

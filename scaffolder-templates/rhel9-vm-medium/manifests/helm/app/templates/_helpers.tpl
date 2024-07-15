@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "tomcat.name" -}}
+{{- define "vm.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "tomcat.fullname" -}}
+{{- define "vm.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,17 +26,17 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "tomcat.chart" -}}
+{{- define "vm.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "tomcat.labels" -}}
-helm.sh/chart: {{ include "tomcat.chart" . }}
-backstage.io/kubernetes-id: {{ include "tomcat.fullname" . }}
-{{ include "tomcat.selectorLabels" . }}
+{{- define "vm.labels" -}}
+helm.sh/chart: {{ include "vm.chart" . }}
+backstage.io/kubernetes-id: {{ include "vm.fullname" . }}
+{{ include "vm.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -44,24 +44,24 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
 {{- define "backstage.labels" -}}
-backstage.io/kubernetes-id: tomcat-vm{{ include "tomcat.name" . }}
+backstage.io/kubernetes-id: {{ include "vm.fullname" . }}
 {{- end }}
 
 
 {{/*
 Selector labels
 */}}
-{{- define "tomcat.selectorLabels" -}}
-app.kubernetes.io/name: tomcat-vm{{ include "tomcat.name" . }}
+{{- define "vm.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "vm.fullname" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "tomcat.serviceAccountName" -}}
+{{- define "vm.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "tomcat.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "vm.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}

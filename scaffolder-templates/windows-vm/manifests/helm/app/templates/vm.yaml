@@ -63,7 +63,7 @@ spec:
       volumes:
       - name: vol-0
         dataVolume:
-          name: {{ include "tomcat.fullname" . }}
+          name: tomcat
       - cloudInitNoCloud:
           userData: |-
             #cloud-config
@@ -78,14 +78,14 @@ spec:
             {{- end }}
         name: cloudinitdisk
   dataVolumeTemplates:
-  - metadata:
-      creationTimestamp: null
-      name: {{ include "tomcat.fullname" . }}
-    spec:
-      storage:
-        resources:
-          requests:
-            storage: 40Gi
-      source:
-        http:
-          url: {{ .Values.image.url }}
+    - metadata:
+        creationTimestamp: null
+        name: tomcat
+      spec:
+        storage:
+          resources:
+            requests:
+              storage: 40Gi
+        source:
+          http:
+            url: {{ .Values.image.url }}

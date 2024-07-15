@@ -10,8 +10,8 @@ metadata:
     - datascience
     - nodejs
 spec:
-  owner: rhdeveloper-workshop-authors
-  type: service
+  owner: AI-team
+  type: inference app
 
   parameters:
     - title: Provide information about the GitLab location
