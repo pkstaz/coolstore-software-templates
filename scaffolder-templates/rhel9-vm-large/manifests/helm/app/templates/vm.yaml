@@ -1,7 +1,7 @@
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
 metadata:
-  name: {{ .Values.applicationName }}
+  name: {{ .Values.app.name }}
   labels:
     {{- include "vm.labels" . | nindent 4 }}
     {{- include "backstage.labels" . | nindent 4 }}
